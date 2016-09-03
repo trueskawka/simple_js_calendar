@@ -1,0 +1,40 @@
+.date {
+  height: 15px;
+  width: 15px;
+  background-color: #eeecf3;
+  display: inline-block;
+  border-radius: 25%;
+  margin: 1px;
+}
+
+.one {
+  background: #d9a9e3;;
+}
+
+.two {
+  background: #ab65ad;
+}
+
+.three {
+  background: #8f4898;
+}
+
+.more {
+  background: #5e2d4f;
+}
+
+.month {
+  width: 130px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.monthname {
+  text-align: center;
+  width: 70px;
+  display: block;
+}
+
+#calendarView {
+  margin-top: 50px;
+}
