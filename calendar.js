@@ -48,7 +48,6 @@ $(function() {
   //get all days in a month
   function getDaysInMonth(month, year) {
     var date = new Date(year, month, 1);
-    console.log(date);
     var days = [];
     while (date.getMonth() === month) {
       days.push(new Date(date));
@@ -59,7 +58,6 @@ $(function() {
 
    function getFirstDay(month, year) {
      var date = new Date(year, month, 1);
-     console.log(date);
      return date.getDay();
    }
 
@@ -124,33 +122,28 @@ $(function() {
       title = postsNumber[p] + pp + "- " + p.substr(4,2) + "/" + p.substr(6,2) + "/" + p.substr(0,4);
     }
 
-    string = "<div title='" + title + "' class='"
+    string = "<div title='" + title + "' class='date"
 
     if (postsNumber[p] == 0) {
-      string += "date'></div>"
-    } else if (postsNumber[p] == 1) {
-      string += "date one'></div>"
-      string = "<a href='" + host + dt + p + "/" + cat + ".html'>" + string + "</a>"
-    } else if (postsNumber[p] == 2) {
-      string += "date two'></div>"
-      string = "<a href='" + host + dt + p + "/" + cat + ".html'>" + string + "</a>"
-    } else if (postsNumber[p] == 3) {
-      string += "date three'></div>"
-      string = "<a href='" + host + dt + p + "/" + cat + ".html'>" + string + "</a>"
+      string += "'></div>"
     } else {
-      string += "date more'></div>"
+        if (postsNumber[p] == 1) {
+        string += " one'></div>"
+      } else if (postsNumber[p] == 2) {
+        string += " two'></div>"
+      } else if (postsNumber[p] == 3) {
+        string += " three'></div>"
+      } else {
+        string += " more'></div>"
+      }
       string = "<a href='" + host + dt + p + "/" + cat + ".html'>" + string + "</a>"
     }
 
-    if (parseInt(p.substr(4,2)) == 8) {
-      $( "#august" ).append( string );
-    } else if (parseInt(p.substr(4,2)) == 9) {
-      $( "#september" ).append( string );
-    } else if (parseInt(p.substr(4,2)) == 10) {
-      $( "#october" ).append( string );
-    } else {
-      $( "#november" ).append( string );
-    }
+    month_list.forEach(function(month) {
+      if (parseInt(p.substr(4,2)) == month[0]) {
+        $(month[1]).append(string);
+      }
+    });
   }
 
   $('.date').hover(
