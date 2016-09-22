@@ -28,19 +28,14 @@ $(function() {
       var first = getFirstDay(month[0]-1,year);
       if (lang == "pl") {
         if (first > 0) {
-          d = first - 1;
+          first = first - 1;
         } else {
-          d = 6;
+          first = 6;
         }
-        while (d > 0) {
-          $(month[1]).append("<div class='date empty'></div>");
-          d -= 1;
-        }
-      } else {
-        while (first > 0) {
-          $(month[1]).append("<div class='date empty'></div>");
-          first -= 1;
-        }
+      }
+      while (first > 0) {
+        $(month[1]).append("<div class='date empty'></div>");
+        first -= 1;
       }
     });
   });
@@ -105,10 +100,14 @@ $(function() {
   //create divs for every date and push them to months
   for(var p in postsNumber) {
     var pp;
+    var val = postsNumber[p];
+    var dday = p.substr(6,2);
+    var dmonth = p.substr(4,2);
+    var dyear = p.substr(0,4);
 
-    if (postsNumber[p] == 1) {
+    if (val == 1) {
       pp = " post ";
-    } else if ([2,3,4].indexOf(postsNumber[p]) > -1 && lang == "pl") {
+    } else if ([2,3,4].indexOf(val) > -1 && lang == "pl") {
       pp = " posty ";
     } else if (lang == "pl") {
       pp = " postów ";
@@ -117,30 +116,31 @@ $(function() {
     }
 
     if (lang == "pl") {
-      title = postsNumber[p] + pp + "- " + p.substr(6,2) + "." + p.substr(4,2) + "." + p.substr(0,4);
+      title = val + pp + "- " + dday + "." + dmonth + "." + dyear;
     } else {
-      title = postsNumber[p] + pp + "- " + p.substr(4,2) + "/" + p.substr(6,2) + "/" + p.substr(0,4);
+      title = val + pp + "- " + dmonth + "/" + dday + "/" + dyear;
     }
 
     string = "<div title='" + title + "' class='date"
 
-    if (postsNumber[p] == 0) {
+    if (val == 0) {
       string += "'></div>"
     } else {
-        if (postsNumber[p] == 1) {
+        if (val == 1) {
         string += " one'></div>"
-      } else if (postsNumber[p] == 2) {
+      } else if (val == 2) {
         string += " two'></div>"
-      } else if (postsNumber[p] == 3) {
+      } else if (val == 3) {
         string += " three'></div>"
       } else {
         string += " more'></div>"
       }
+      //blog host + languge version + date + category
       string = "<a href='" + host + dt + p + "/" + cat + ".html'>" + string + "</a>"
     }
 
     month_list.forEach(function(month) {
-      if (parseInt(p.substr(4,2)) == month[0]) {
+      if (parseInt(dmonth) == month[0]) {
         $(month[1]).append(string);
       }
     });
