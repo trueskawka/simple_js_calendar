@@ -66,7 +66,7 @@ $(function() {
     month.forEach(function(day) {
       //comparing objects didn't make sense
       //year
-      var value = "20" + String(day.getYear()).substr(1,2);
+      var value = String(day.getFullYear());
 
       //month
       m = String(parseInt(day.getMonth()+1));
