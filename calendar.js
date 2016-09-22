@@ -1,27 +1,67 @@
 $(function() {
   //category for subpages
   var cat = $("#calendar").attr("datacat");
+  var lang = window.location.pathname.substr(1,2);
+  var dt = "";
   var host = window.location.origin;
-  var dates = []
-  var postsNumber = {};
-  var dates;
-  var lang = window.location.pathname.substr(1,2)
 
-  //mockup first 4 months
-  var months = [
-    [8, new Array(31)
-    .join().split(',')
-    .map(function(item, index){ return ++index; })],
-    [9, new Array(30)
-    .join().split(',')
-    .map(function(item, index){ return ++index; })],
-    [10, new Array(31)
-    .join().split(',')
-    .map(function(item, index){ return ++index; })],
-    [11, new Array(30)
-    .join().split(',')
-    .map(function(item, index){ return ++index; })]
-  ];
+  //lists
+  var dates = [];
+  var months = [];
+
+  //counter
+  var postsNumber = {};
+
+  //setup
+  var month_list =[
+                    [8, "#august"],
+                    [9, "#september"],
+                    [10, "#october"],
+                    [11, "#november"]
+                  ];
+  var year_list = [2016];
+
+  //make an array of all months and their days
+  year_list.forEach(function(year) {
+    month_list.forEach(function(month){
+      months.push(getDaysInMonth(month[0]-1,year));
+      var first = getFirstDay(month[0]-1,year);
+      if (lang == "pl") {
+        if (first > 0) {
+          d = first - 1;
+        } else {
+          d = 6;
+        }
+        while (d > 0) {
+          $(month[1]).append("<div class='date empty'></div>");
+          d -= 1;
+        }
+      } else {
+        while (first > 0) {
+          $(month[1]).append("<div class='date empty'></div>");
+          first -= 1;
+        }
+      }
+    });
+  });
+
+  //get all days in a month
+  function getDaysInMonth(month, year) {
+    var date = new Date(year, month, 1);
+    console.log(date);
+    var days = [];
+    while (date.getMonth() === month) {
+      days.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+    return days;
+   }
+
+   function getFirstDay(month, year) {
+     var date = new Date(year, month, 1);
+     console.log(date);
+     return date.getDay();
+   }
 
   //get dates from each post
   $('.dpost').each(function(i, p) {
@@ -30,30 +70,38 @@ $(function() {
 
   //assign a number to each day of each month
   months.forEach(function(month) {
-    for (var i = 1; i <= month[1].length; i++) {
-      var value = "2016"
-      if (month[0] < 10) {
-        value += "0" + month[0];
+    month.forEach(function(day) {
+      //comparing objects didn't make sense
+      //year
+      var value = "20" + String(day.getYear()).substr(1,2);
+
+      //month
+      m = String(parseInt(day.getMonth()+1));
+      if (m < 10) {
+        value += "0" + m;
       } else {
-        value += month[0];
+        value += m;
       }
-      if (i < 10) {
-        value += "0" + i;
+
+      //day
+      d = String(parseInt(day.getDate()));
+      if (d < 10) {
+        value += "0" + d;
       } else {
-        value += i;
+        value += d;
       }
 
       postsNumber[value] = dates.reduce(function(n, val) {
         return n + (val === value);
       }, 0);
-    }
+    });
   });
 
-  //remember about the language version
+  //keep in mind the language version
   if (lang == "pl") {
-    dates = "/pl/dates/";
+    dt = "/pl/dates/";
   } else {
-    dates = "/dates/";
+    dt = "/dates/";
   }
 
   //create divs for every date and push them to months
@@ -82,16 +130,16 @@ $(function() {
       string += "date'></div>"
     } else if (postsNumber[p] == 1) {
       string += "date one'></div>"
-      string = "<a href='" + host + dates + p + "/" + cat + ".html'>" + string + "</a>"
+      string = "<a href='" + host + dt + p + "/" + cat + ".html'>" + string + "</a>"
     } else if (postsNumber[p] == 2) {
       string += "date two'></div>"
-      string = "<a href='" + host + dates + p + "/" + cat + ".html'>" + string + "</a>"
+      string = "<a href='" + host + dt + p + "/" + cat + ".html'>" + string + "</a>"
     } else if (postsNumber[p] == 3) {
       string += "date three'></div>"
-      string = "<a href='" + host + dates + p + "/" + cat + ".html'>" + string + "</a>"
+      string = "<a href='" + host + dt + p + "/" + cat + ".html'>" + string + "</a>"
     } else {
       string += "date more'></div>"
-      string = "<a href='" + host + dates + p + "/" + cat + ".html'>" + string + "</a>"
+      string = "<a href='" + host + dt + p + "/" + cat + ".html'>" + string + "</a>"
     }
 
     if (parseInt(p.substr(4,2)) == 8) {

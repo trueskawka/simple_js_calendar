@@ -7,6 +7,10 @@
   margin: 1px;
 }
 
+.empty {
+  background-color: transparent;
+}
+
 .one {
   background: #d9a9e3;;
 }
